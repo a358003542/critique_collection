@@ -1,0 +1,305 @@
+% !Mode:: "TeX:UTF-8"
+
+\documentclass[12pt,oneside]{book}
+
+\newlength{\textpt}
+\setlength{\textpt}{12pt}
+    
+%========基本必备的宏包========%
+\RequirePackage{calc,float,moresize}
+%\RequirePackage[onehalfspacing]{setspace}
+\linespread{1.5}
+%1.3 onehalfspacing
+%1.6 doublespacing
+
+%===========加入目录 某章或某节=====%
+\makeatletter
+
+\newcommand{\addchtoc}[1]{
+        \cleardoublepage
+        \phantomsection
+        \addcontentsline{toc}{chapter}{#1}}
+
+\newcommand{\addsectoc}[1]{
+        \phantomsection
+        \addcontentsline{toc}{section}{#1}}
+
+%===========全文基本格式==========%
+\setlength{\parskip}{1.6ex plus 0.2ex minus 0.2ex}   %段落間距
+\setlength{\parindent}{\textpt * \real{2}}
+\RequirePackage{indentfirst} 
+
+%=========页面设置=========%
+\RequirePackage[a4paper, %a4paper size 297:210 mm
+  bindingoffset=0mm,%裝訂線
+  top=35mm,  %上邊距 包括頁眉
+  bottom=30mm,%下邊距 包括頁腳
+  inner=30mm,  %左邊距or inner
+  outer=30mm,  %右邊距or  outer
+  headheight=10mm,%頁眉
+  headsep=15mm,%
+  footskip=15mm,%
+  marginparsep=0pt, %旁註與正文間距
+  marginparwidth=0em,includemp=false% 旁註寬度計入width%旁註寬度
+  ]{geometry}
+
+%color
+\RequirePackage[table,svgnames]{xcolor}
+
+%================字體================%
+%设置数学字体
+\RequirePackage{amssymb,amsmath}
+\RequirePackage{stmaryrd}
+\everymath{\displaystyle}
+
+\RequirePackage{fontspec}
+%設置英文字體
+\setmainfont[Mapping=tex-text]{DejaVu Serif}
+\setsansfont[Mapping=tex-text]{DejaVu Sans}
+\setmonofont[Mapping=tex-text]{DejaVu Sans Mono}
+
+
+%中文環境
+\RequirePackage[]{xeCJK}
+\xeCJKsetup{PunctStyle=plain}
+\setCJKmainfont[FallBack=DejaVu Serif, ItalicFont=KaiTi]{Source Han Serif CN}
+\setCJKsansfont[FallBack=DejaVu Sans]{Source Han Sans CN}
+\setCJKmonofont[FallBack=DejaVu Sans Mono]{KaiTi}
+
+
+%%===============中文化=========%
+\renewcommand\contentsname{目~录}
+\renewcommand\listfigurename{插图目录}
+\renewcommand\listtablename{表格目录}
+\renewcommand\bibname{参~考~文~献}
+\renewcommand\indexname{索~引}
+\renewcommand\figurename{图}
+\renewcommand\tablename{表}
+\renewcommand\partname{部分}
+\renewcommand\appendixname{附录}
+\renewcommand{\today}{\number\year{}年\number\month{}月\number\day{}日}
+
+
+%=======页眉页脚格式=========%
+\RequirePackage{fancyhdr}   %頁眉頁腳
+\RequirePackage{zhnumber}  %计数器中文化
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]
+{\markright{第\zhnumber{\arabic{section}}节~~#1}{}}
+
+\fancypagestyle{plain}{%
+    \fancyhf{}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}
+    \fancyhf[HR]{\ttfamily \footnotesize \rightmark }
+    \fancyhf[FR]{\thepage}}
+\pagestyle{plain}
+
+
+%=========章節標題設計=========%
+\RequirePackage{titlesec}
+%修改part
+\titleformat{\part}{\huge\sffamily}{}{0em}{}
+%修改chapter
+\titleformat{\chapter}{\LARGE\sffamily}{}{0em}{}
+%修改section
+\titleformat{\section}{\Large\sffamily}{}{0em}{}
+%修改subsection
+\titleformat{\subsection}{\large\sffamily}{}{0em}{}
+%修改subsubsection
+\titleformat{\subsubsection}{\normalsize\sffamily}{}{0em}{}
+
+
+%================目录===============%
+%toc label to contents space   dynamic adjust
+\RequirePackage{tocloft}%
+\renewcommand{\numberline}[1]{%
+  \@cftbsnum #1\@cftasnum~\@cftasnumb%
+}
+
+%==============超鏈接===============%
+\RequirePackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref} %設置書簽和目錄鏈接等
+\newcommand{\hlabel}[1]{\phantomsection \label{#1}}%某一小段的引用
+
+
+%=================文字強調=========%
+\RequirePackage{xeCJKfntef}
+
+\let\oldemph\emph % Save emph in oldemph
+\renewcommand{\emph}[1]{\textcolor{blue}{\textbf{#1}}}  
+
+%==================插入圖片=======%
+\RequirePackage{wrapfig}
+\RequirePackage{graphicx}
+\graphicspath{{figures/}}
+%change the caption style a little like 1-1
+\renewcommand{\thefigure}{\arabic{chapter}-\arabic{figure}}
+
+%插入代码
+\RequirePackage{fancyvrb} 
+\fvset{frame=lines,tabsize=4 ,baselinestretch=1.8, fontsize=\footnotesize}
+
+
+% 框线表示文章引用
+\RequirePackage{mdframed} 
+\mdfsetup{frametitlealignment=\center}
+\newmdenv[frametitlebackgroundcolor=gray!20, linewidth=1pt,
+                    frametitlerulewidth=1pt, frametitlerule=true]{bookref}
+ 
+ 
+%========脚注=========%
+\RequirePackage{tikz} 
+\newcommand*\circled[1]{
+\tikz[baseline=(char.base)]
+\node[shape=circle,draw,inner sep=0.4pt,minimum size=4pt] (char) {#1};}
+
+\newcommand*\circledarabic[1]{\circled{\arabic{#1}}}
+
+\RequirePackage{perpage} %the perpage package
+\MakePerPage{footnote} %the perpage package command
+
+\renewcommand*{\thefootnote}{\protect\circledarabic{footnote}}
+
+\renewcommand\@makefntext[1]{\vspace{5pt}\noindent
+\makebox[20pt][c]{\fontsize{10pt}{12pt}\@thefnmark}
+\fontsize{10pt}{12pt}\selectfont #1}
+
+\setlength{\skip\footins}{20pt plus 10pt}
+%main body 与脚注之间的距离
+
+\makeatother
+
+\newenvironment{shici}{
+\begin{verse}
+\centering\large\hspace{12pt}}
+{\end{verse}}
+
+
+\title{批判集}
+\author{Wander}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Wander}}
+
+  
+\begin{document}
+\maketitle
+
+
+\frontmatter 
+\addchtoc{前言}
+\chapter*{前言}
+要么闭嘴，要么批判。
+
+\addchtoc{目录}
+\setcounter{tocdepth}{2}    
+\tableofcontents
+
+
+\mainmatter
+
+
+\chapter{对名声的批判}
+名声名声，声为本，名为虚。
+
+要将你的声音刻在石头上。
+
+个体人存在本身即是价值，个体人存在本身即是盛宴。
+
+想着如何让自己的声音在人群中传播，想着他人能给你什么关注，这些都是有成本的，这些对虚名的渴望，这些获得，随着时间推移，终将失去，终将成为泡影。
+
+上天砸在你头上的名和钱，那确实是个好东西啊。
+
+
+\chapter{对物种、民族、国家等叙事的批判}
+个体人不需要物种、民族、国家等等叙事来表明自己存在的价值。个体人的存在价值是自给自足的。那些物种对抗，民族对抗，国家对抗的老旧叙事早就过时了。
+
+太阳光让我欣喜，我觉得什么国家，民族，区域政治等等话题都不如这太阳光。
+
+\chapter{对孔子的批判}
+君子远庖厨，这句话揭示了孔子作为养尊处优的文官寄生阶层的本质。
+
+不愿意讨论死亡，不知死，焉知生，儒家不愿意对民众进行死亡教育是怕，怕老子那句民不畏死，奈何以死惧之。
+
+\chapter{对孔子批判的批判}
+孔子，其人生的大部分精力都花在了求学，教书，著书上，从政只占其人生中的小部分。评判一个人当看其人生的主要部分，孔子的主要部分就是他在求学教书著书上所做的努力，这些努力使得千年之后仍然不愧为老师这个职业的开门宗师，就如同希波克拉底之于医生，孔子的有教无类等等教育理念，千年之后仍将是世人推崇的先进理念。
+
+任何思想意识都脱离不了作者自身的时代和阶级局限性的。一家独大总是有失偏颇的，诚然总有人反驳宋的理学等等有一部分是对的，有那些是有道理的。宋朝所有的这些学派对于孔子总显得有那么一丝低劣就在于那种骨子里的好为人师喜欢说教和一家独大倾向。孔子的思想不是都对的，但他有两个地方比这些学派都高明，那就是有教无类和因材施教。​
+
+\chapter{对杨广的批判}
+杨广可以定性为暴君，他灭亡的原因和有些人吹捧他的一些功绩本来就是可以分开的。他灭亡的原因就是他是一个暴君，而不是开凿大运河、迁都等等。他的灭亡他的残暴从历史时间发展顺序来看就是他的三侵高丽，给中国人民和高丽人民都带来了深重的灾难。而他的这个暴行才是导致后世将其定性为暴君的原因，也是他走向灭亡的原因，这个和一些人吹捧的他的那些功绩没有任何因果关系。功过三七分，杨广过大于功，给人民带来了深重的灾难，他的下场完全是咎由自取。
+
+\chapter{对版权保护的批判}
+版权保护的是作者的知识产权和盈利权等，而不是知识传播权。
+
+对版权的保护不能过度，否则就损害到了人们享受知识的权力。这中间界限的把握，一是不能盈利；二是图书的时效性和类别。
+
+对第二点有一个简单的判别标准，那就是这本图书在图书馆里面能不能免费借阅观看，如果能，那么这种行为的结果无非是让阅读者从图书馆阅读转移到了到家里阅读，这又有什么损害呢。
+
+
+
+
+\chapter{对卢梭的忏悔录的批判}
+不要相信那个还在向法国贵妇们摇尾乞怜的卢梭写的《忏悔录》的真诚性，但可以相信那个晚年孤独的在山路间遐想漫步的卢梭写的《一个孤独漫步者的遐想》的真诚性。
+
+\chapter{对年龄的批判}
+外人看外表，容貌易老而内心的那个我还是那个我。
+
+四十岁之后你应该对自己的一切负全责——林肯。
+
+四十岁之后你的第二人生开启了，是个体人的新生——荣格。
+
+
+\chapter{对人们欲望太多不知满足的批判}
+\begin{shici}
+人们想要，更多还有更多\\
+去站在世界之巅\\
+他们彼此比较\\
+看谁最聪明跑的更快\\
+看谁最坚韧爬的更高\\
+看谁最有权势屹立不倒
+
+时间衰减，少之又少\\
+让事情变得不是那么有意义\\
+欲望相互竞争\\
+所以那最聪明的满足于宇宙万物\\
+所以那坚韧的满足于自我\\
+而那最有权势的当属上帝\\
+他满足于一切
+\end{shici}
+
+
+
+\chapter{对奴隶道德的批判}
+\begin{shici}
+原来一直，我都在一个小黑屋里\\
+看着眼前的王座，渴求一个主人\\
+千百年来，历史传统、文字书籍里，充斥着奴仆的道德\\
+而今我坐上王座，成为了自己的君王 
+
+我独断万古、遨游天际\\
+但是请别叫做君王，请叫我船长\\
+驾驶着我自己这艘破烂的小船\\
+在孤独无垠、波涛汹涌的大海里寻觅 
+\end{shici}
+
+\chapter{芒格对中国国民性的批判}
+芒格批评中国两大致命伤：
+
+\begin{enumerate}
+\item 思维倾向于相信运气或者某种神秘作用而不是相信几率。
+\item 官僚主义对学术教育的损害
+\end{enumerate}
+
+
+
+
+
+
+
+
+\end{document}
+
+
+
